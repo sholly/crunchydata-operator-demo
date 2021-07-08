@@ -326,3 +326,7 @@ pgo scaledown test --query
 pgo scaledown test --target=test-lxzh
 
 ```
+
+### Cloning a cluster: 
+
+`pgo create cluster newtest --restore-from=test`
