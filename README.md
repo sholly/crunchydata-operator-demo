@@ -62,6 +62,18 @@ users:
 	username: test password: password
 ```
 
+Alternatively, create a cluster with a specified database, as well as specifying 
+the volume sizes for the database pvcs as well as the pg_backrest pvc: 
+
+```
+pgo create cluster test \
+  -u test \
+  --password password \
+  -d todo \
+  --pgbackrest-pvc-size=10Gi\ 
+  --pvc-size=5Gi
+```
+
 Show status of cluster: 
 `pgo -n pgo show workflow $workflow_id`
 
