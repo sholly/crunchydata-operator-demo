@@ -70,7 +70,7 @@ pgo create cluster test \
   -u test \
   --password password \
   -d todo \
-  --pgbackrest-pvc-size=10Gi\ 
+  --pgbackrest-pvc-size=10Gi \
   --pvc-size=5Gi
 ```
 
