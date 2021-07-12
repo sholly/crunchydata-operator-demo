@@ -1,7 +1,10 @@
-create namespace pgo
+## Crunchydata installation
 
-install operator via console
+Create namespace pgo
 
+install operator via the Openshift console, use the 'pgo' project for installation: 
+
+Next, turn on the recommended *restricted* SecurityContextConstraint: 
 oc edit cm pgo-config
 find pgo.yaml section
 add DisableFSGroup: true
@@ -13,7 +16,9 @@ oc -n pgo scale --replicas 0 deployment/postgres-operator
 oc -n pgo scale --replicas 1 deployment/postgres-operator
 ```
 
-Set up the pgo client: 
+## Post-installation configuration
+
+Set up the pgo client (assuming a Linux install): 
 
 ```
 curl https://raw.githubusercontent.com/CrunchyData/postgres-operator/v4.6.2/deploy/install-bootstrap-creds.sh > install-bootstrap-creds.sh
@@ -28,7 +33,7 @@ PGO_CMD=oc ./client-setup.sh
 
 ```
 
-Add exports to bashrc: 
+Add exports to .bashrc: 
 
 ```
 export PATH=/home/jshollen/.pgo/pgo:$PATH
@@ -36,9 +41,10 @@ export PGOUSER=/home/jshollen/.pgo/pgo/pgouser
 export PGO_CA_CERT=/home/jshollen/.pgo/pgo/client.crt
 export PGO_CLIENT_CERT=/home/jshollen/.pgo/pgo/client.crt
 export PGO_CLIENT_KEY=/home/jshollen/.pgo/pgo/client.key
+export PGO_NAMESPACE="pgo"
 ```
 
-Expose the api endpoint: 
+Now, expose the api endpoint: 
 
 ```
 oc -n pgo expose deployment postgres-operator
@@ -49,6 +55,12 @@ export apiserver url:
 
 `export PGO_APISERVER_URL="https://$(oc -n "$PGO_OPERATOR_NAMESPACE" get route postgres-operator -o jsonpath="{.spec.host}")"`
 
+Add to your .bashrc: 
+
+`export PGO_APISERVER_URL=https://postgres-operator-pgo.apps.ocp4.lab.unixnerd.org`
+
+
+## Creating clusters
 
 Create cluster: 
 
@@ -98,11 +110,11 @@ Test cluster availability:
 
 ## Creating backups: 
 
-### Full: 
+### Full backups: 
 
 `pgo -n pgo backup test --backup-opts="--type=full"`
 
-### Incremental: 
+### Incremental backups: 
 
 `pgo -n pgo backup test --backup-opts="--type=incr"`
 
